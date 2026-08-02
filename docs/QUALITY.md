@@ -71,7 +71,7 @@ Evidence recorded on 2026-08-02 against policy version `2026-08-01.9`:
   scripts. Bandit reported zero low-, medium-, or high-severity issues after six narrowly justified
   scanner exclusions.
 - The wheel and source archive passed build, metadata, and wheel-content checks. The browser-rendered
-  architecture map was inspected at its native 1,004-by-551 resolution and at an 838-pixel README
+  architecture map was inspected at its native 1,100-by-622 resolution and at an 838-pixel README
   width.
 - The repository validator, the skill-creator validator, and the official Agent Skills reference
   validator all accepted `charity-donor-outreach`.

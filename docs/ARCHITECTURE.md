@@ -4,11 +4,11 @@
 
 ![Policy-gated donor outreach system map](outreach-system-map.png)
 
-The system map shows the typed handoffs and trust boundaries. Components labelled `DETERMINISTIC`
-own validation, policy, minimization, output checks, and result construction. The dashed
-`DraftProvider` boundary receives only `DraftRequest` and returns `CandidateDraft`; it cannot decide
-policy. Amber paths distinguish stops before a provider call from candidates withheld afterward,
-and human approval remains external.
+The system map groups deterministic work into control and output planes so the request path remains
+readable at README width. Those planes own validation, policy, minimization, output checks, and
+result construction. The dashed `DraftProvider` boundary receives only `DraftRequest` and returns
+`CandidateDraft`; it cannot decide policy. Amber status rails distinguish stops before a provider
+call from candidates withheld afterward, and human approval remains external.
 
 ## Components
 

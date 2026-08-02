@@ -825,8 +825,8 @@ def test_architecture_visual_is_accessible_and_referenced() -> None:
     assert png.startswith(b"\x89PNG\r\n\x1a\n")
     assert png[12:16] == b"IHDR"
     assert (int.from_bytes(png[16:20], "big"), int.from_bytes(png[20:24], "big")) == (
-        1_004,
-        551,
+        1_100,
+        622,
     )
     assert len(png) < 100_000
 
