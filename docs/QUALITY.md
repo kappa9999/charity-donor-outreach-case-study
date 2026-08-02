@@ -1,0 +1,162 @@
+# Quality evidence
+
+## Evidence model
+
+The project does not assign itself an aggregate quality score. Each material claim maps to an
+observable behavioral invariant, a focused test, and a failure state that a reviewer can inspect.
+
+| Invariant | Evidence |
+| --- | --- |
+| Unknown or denied permission never reaches a provider | Policy/service tests assert provider call count remains zero |
+| Unknown authority outranks a simultaneous cadence suppression | Conflict test asserts blocked consent resolution, no provider call |
+| Do-not-contact outranks all drafting behavior | Suppression test asserts null draft and provider_called=false |
+| Missing or syntactically malformed selected-channel contact data fails closed | Conservative ASCII-email schema/runtime differentials and email/letter no-provider-call tests; no deliverability claim |
+| Contact-frequency policy is deterministic | Fixed campaign date and boundary-day tests |
+| Ask calculation is provider-independent and schema/runtime numeric meaning agrees | Canonical ASCII-string differential tests plus Decimal rounding, floor, ceiling, currency, future-date, mixed-script-digit, and missing-basis tests |
+| Major/principal relationships and high asks require review | Review-disposition tests |
+| Provider context excludes structured or text-smuggled contact details, donor-ID tokens, policy controls, and raw giving history | Contract-surface, joined-view, exact-value, Unicode/encoded contact, policy/giving alias, token-boundary, and captured-request tests |
+| Reordering fragments across otherwise safe fields cannot reconstruct a provider-bound contact, international phone, escape, instruction, policy override, solicitation, giving term, or currency-plus-amount | Exhaustive declared-target splits, adversarial permutation replays, contextual contact/phone grammars, pinned E.164 metadata, bounded-state tests, and ordinary-prose false-positive controls |
+| Unapproved, instruction/policy/giving/solicitation/money/contact-like facts do not reach the provider | Adversarial fact, safe-ID redaction, and source/namespace provenance tests |
+| Required salutation, purpose, fact, ask, call-to-action, and sign-off components are structurally anchored | Removal, repetition, embedding, overlap, and terminal-sign-off tests |
+| Missing sender identity and unsupported facts, generic URI schemes, contacts, Unicode numeric/word-form numbers, multi-currency monetary amounts, claims, asks, instructions, internal controls, HTML, unsafe Unicode, malformed spacing, or pressure are withheld | DraftGuard and provider-contract parameterized tests |
+| Provider prose cannot replace or supplement the policy-owned ask/no-ask paragraph through known lexical bypasses | Exact-copy, standalone-paragraph, CTA-label, short-fact, worded-amount, compatibility-normalization, and paraphrase regressions |
+| A provider cannot mutate authoritative ask, campaign, guard, or later-record state or change a mapping between security reads | Detached-request mutation, hostile scalar/mapping, one-read snapshot, and two-record corruption regressions |
+| Non-built-in provider output can never reach draft_ready | Provider-assurance disposition test |
+| Provider exceptions, malformed JSON, and invalid UTF-8 lines do not terminate the batch | Batch and CLI integration tests |
+| Partial output cannot replace an existing result file | Atomic-writer rollback and replacement-failure tests |
+| Output cannot alias and overwrite either source input | Resolved-path and hard-link tests |
+| Duplicate keys, non-finite/oversized numbers, invalid Unicode/UTF-8, deep nesting, oversized collections, cycles, aliases, and diagnostic amplification fail closed | Strict parser, campaign/direct preflight, capped-diagnostic, DAG, and CLI containment tests |
+| Distinct malformed lines have distinct nonrevealing fingerprints | Raw-line digest correlation test |
+| Canonically identical characters with different JSON scalar types cannot share an audit fingerprint | Decimal-versus-string and invalid-contact type-tag regressions |
+| Attacker-controlled unknown member names cannot leak through diagnostics | PII-shaped extra-key redaction tests |
+| Committed JSON Schemas match executable models | Schema-drift test |
+| JSON Schemas declare Draft 2020-12 and reject known runtime-contract bypasses | Dialect assertion and differential tests for canonical money/dates, fact sources, CTA URLs, control/format text, unique result codes, paired fields, and result states |
+| Result status, draft, review, provider, reason, and issue fields cannot contradict or accept unknown vocabulary | Runtime/schema envelope and enum mutation tests |
+| Maximum valid names compose into valid salutations and subjects without aborting a batch | Boundary-length and internal-request containment tests |
+| Skill name, folder, frontmatter, references, and line budget remain valid | Skill contract test plus external validators |
+| Example output is generated by the committed implementation | Golden-output regeneration test |
+
+## Local quality gate
+
+```bash
+python -m ruff check .
+python -m ruff format --check .
+python -m mypy src scripts
+python -m pytest
+python path/to/skill-creator/scripts/quick_validate.py charity-donor-outreach
+```
+
+The CI workflow runs lint, formatting, strict type checks, tests with branch coverage, schema
+drift and differential checks, and the repository's skill validator on Ubuntu and Windows with
+Python 3.11 and 3.14. A separate official Agent Skills reference-library validation is included in
+the release checklist because that library describes itself as demonstrative rather than a
+production runtime dependency.
+
+## Verified release snapshot
+
+Evidence recorded on 2026-08-01 against policy version `2026-08-01.9`:
+
+- Windows CPython 3.12: 1,253 tests passed with 97.89% aggregate branch coverage against a 95%
+  required threshold.
+- The built wheel, installed into isolated environments: 1,253 tests passed on Windows Python
+  3.11, Windows Python 3.14, and WSL2 Ubuntu Python 3.12.
+- Ruff formatting/lint and strict mypy checks passed for all source and maintenance scripts on
+  Windows; strict mypy also passed under WSL2.
+- The repository validator, the skill-creator validator, and the official Agent Skills reference
+  validator all accepted `charity-donor-outreach`.
+- An isolated dependency audit reported no known vulnerabilities. A full-file secret scan
+  reported no findings; the public IANA and E.164 checksum/commit literals are narrowly
+  allowlisted inline and covered by exact-value contract tests.
+
+These are reproducible release observations, not claims that automated testing replaces
+deployment-specific privacy, legal, security, or human evaluation.
+
+## Adversarial cases
+
+- Missing consent key
+- Explicit unknown and denied permission
+- Unknown permission combined with a recent-contact conflict
+- Do-not-contact with otherwise complete data
+- Missing email or postal address for the selected channel
+- Malformed email dot-atoms/DNS labels and email control, format, path, or display-name text
+- Email, URL, phone, and street-address text smuggled through identity or fact fields
+- Unicode IDN suffix tricks, Unicode decimal phone/street digits, and grouped international phones
+- CJK numeric-digit phones, word-form/vanity phones, IP literals, generic URI schemes, international
+  address forms, strong defanging, spaced addresses, and one-layer percent/HTML/hex encoding
+- Exact donor IDs smuggled through identity, fact text, or fact IDs; short/common-ID boundaries
+- Reordered multi-field fragments that reconstruct instructions, response-format commands, guard
+  or approval controls, solicitation verbs, giving/currency language, encoded characters,
+  defanged domains, IPv4/IPv6 values, domestic phones, or grouped international phones
+- Ordinary contact/support prose, organization names containing `Point`, unrelated year/count
+  fields, and harmless split `&amp;`, `&ndash;`, `&eacute;`, and `&copy;` entities as false-positive
+  controls
+- Future and too-recent contact dates
+- Missing donation history under a multiplier ask policy
+- Giving-currency mismatch and future-dated gift history
+- Lifetime value below a supplied last gift when largest gift is absent
+- Duplicate fact IDs across donor and campaign sources
+- Duplicate JSON keys that attempt to override consent or do-not-contact
+- NaN, oversized/excessive-exponent numbers, invalid Unicode scalar values, C0/C1 controls,
+  default-ignorable/variation characters, Unicode 14 unassigned/private-use ranges, invalid
+  UTF-8, and excessive JSON nesting
+- A parser-accepted 497-level extra value followed by a good record in the same batch
+- Oversized JSONL lines, campaign fact collections, 1,000-level direct nesting, huge integers,
+  repeated-container DAGs, and validation-diagnostic amplification
+- Extra undeclared donor fields
+- Instruction-like content marked approved
+- Consent/suppression aliases and explicit or donor-subject raw-giving history marked approved;
+  controlled program-count/pledge false-positive controls
+- Fact source/namespace spoofing and sensitive fact-ID audit redaction
+- Provider exception on one record in a multi-record batch
+- Low-level provider mutation of nested ask/CTA objects across one and multiple records
+- Provider output with duplicate/unapproved fact IDs, undeclared fact paragraphs, missing declared
+  facts, or overlapping short fact literals
+- Missing/altered purpose, sender sign-off, call-to-action, salutation, or standalone ask paragraph
+- Fabricated URL/URI scheme, contact, decimal/word/Roman/CJK/Tamil/Ethiopic number, monetary amount,
+  instruction/internal label, matching-gift claim, HTML, unsafe Unicode, malformed paragraph
+  spacing, or pressure phrase
+- Word-form asks, repeated/embedded policy ask copy, CTA-label and short-fact masking attempts,
+  compatibility-character disguises, JPY/yen/Unicode-currency-symbol cases, common solicitation
+  paraphrases, lowercase currency codes, punctuation/connector layouts, colloquial denominations,
+  currency homograph false positives, and unsupported impact claims
+- PII-shaped unknown JSON member names that must reduce to `$extra` in diagnostics
+- Numeric-token versus same-character string fingerprint collisions
+- Malformed CTA hosts, ports, credentials, whitespace, backslashes, percent encoding, and
+  schema/runtime scheme mismatch
+- Numeric JSON money, mixed-script digits, exponent strings, binary-float multiple-of parity
+  traps, and coercive numeric/datetime date inputs
+- Malformed JSON and non-object JSONL lines
+- Mid-run output rollback and atomic-replacement failure
+- Output paths equal or hard-linked to campaign/donor inputs
+- Contradictory result envelopes and schema/runtime differential cases
+
+## Honest limits
+
+1. **Semantic truth:** deterministic checks catch common unsupported structures; they cannot prove
+   that every paraphrase is faithful. Production requires sampled human evaluation and, where
+   justified, a measured claim-verification layer.
+2. **Injection detection:** structured role separation and deterministic gates reduce exposure,
+   but pattern matching is defense in depth, not a proof against every adversarial paraphrase.
+3. **Consent law:** channel_consent is an upstream operational assertion. The project does not
+   infer legal authority or jurisdiction-specific requirements.
+4. **Data lifecycle:** the reference CLI does not implement authentication, encryption, retention,
+   deletion, or a durable audit store.
+5. **Provider behavior:** only the deterministic provider is included. Every other provider is
+   forced to review_required, but an adapter still needs contract tests, privacy review,
+   timeout/retry policy, cost/latency measurement, and model-version pinning.
+6. **Schema scope:** Draft 2020-12 expresses canonical financial/date/text lexical contracts but
+   cannot express every ordered cross-field comparison; runtime Pydantic validation remains
+   authoritative.
+7. **Human review UX:** review states are structured but no reviewer application is included.
+8. **Delivery:** there is deliberately no send path.
+9. **Contact-path verification:** email and postal checks establish presence and declared syntax,
+   not mailbox existence, address validity, or deliverability. Those remain upstream operational
+   assertions and human-approval inputs.
+10. **Lexical ambiguity:** a bare homograph such as `a pound` is not classified as currency without
+    a monetary or national cue, so an ordinary weight fact is not automatically suppressed.
+    Upstream fact approval and human evaluation remain necessary for context-dependent language.
+11. **Uppercase ISO word-codes:** canonical ISO 4217 codes fail closed even when styled prose uses
+    the same uppercase token, such as `TOP 500` or `TRY 10`. These uncommon false positives produce
+    a review state; the implementation does not guess financial intent from surrounding prose.
+
+These are deployment seams, not hidden claims of completeness.

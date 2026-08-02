@@ -1,0 +1,12 @@
+flowchart LR
+  A[Campaign JSON plus donor JSONL] --> B[Strict JSON plus schema validation]
+  B -->|Invalid| X[Invalid result<br/>No provider call]
+  B --> C[Deterministic policy gate]
+  C -->|Blocked or suppressed| Y[Structured stop result<br/>No provider call]
+  C -->|Allow or review| D[Minimized DraftRequest]
+  D --> E[Draft provider]
+  E -->|Exception| Z[Provider error<br/>Continue batch]
+  E --> F[Output guard]
+  F -->|Fail| Q[Quality rejected<br/>Draft withheld]
+  F -->|Pass| G[Built-in template may be draft ready<br/>All other providers require review]
+  G --> H[Human approval and delivery<br/>Outside this repository]

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Charity Donor Outreach"
+  short_description: "Safe, reviewable donor outreach drafts"
+  default_prompt: "Use $charity-donor-outreach to draft policy-checked donor outreach from approved donor records and campaign facts."
