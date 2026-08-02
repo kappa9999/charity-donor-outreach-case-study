@@ -2,12 +2,13 @@
 
 ## Request path
 
-![Controlled donor outreach operating model](architecture-flow.png)
+![Policy-gated donor outreach system map](architecture-flow.png)
 
-The overview keeps the reviewer path to seven stages: receive inputs, validate them, decide policy,
-minimize context, draft inside an isolated provider boundary, verify the candidate, and retain
-human approval. The component and failure sections below define the exact contracts behind that
-view.
+The system map shows the typed handoffs and trust boundaries. Components labelled `DETERMINISTIC`
+own validation, policy, minimization, output checks, and result construction. The dashed
+`DraftProvider` boundary receives only `DraftRequest` and returns `CandidateDraft`; it cannot decide
+policy. Amber paths distinguish stops before a provider call from candidates withheld afterward,
+and human approval remains external.
 
 ## Components
 

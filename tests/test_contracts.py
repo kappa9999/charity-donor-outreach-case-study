@@ -825,14 +825,14 @@ def test_architecture_visual_is_accessible_and_referenced() -> None:
     assert png.startswith(b"\x89PNG\r\n\x1a\n")
     assert png[12:16] == b"IHDR"
     assert (int.from_bytes(png[16:20], "big"), int.from_bytes(png[20:24], "big")) == (
-        1_672,
-        941,
+        1_004,
+        551,
     )
-    assert len(png) < 1_000_000
+    assert len(png) < 100_000
 
     architecture = (ROOT / "docs" / "ARCHITECTURE.md").read_text(encoding="utf-8")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    alt_text = "Controlled donor outreach operating model"
+    alt_text = "Policy-gated donor outreach system map"
     assert f"![{alt_text}](architecture-flow.png)" in architecture
     assert f"![{alt_text}](docs/architecture-flow.png)" in readme
     assert not (ROOT / "docs" / "architecture-flow.svg").exists()
