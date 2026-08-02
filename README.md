@@ -49,7 +49,7 @@ systems rather than copy the test defaults.
 
 ## System at a glance
 
-![Controlled donor outreach request path](docs/architecture-flow.svg)
+![Controlled donor outreach operating model](docs/architecture-flow.png)
 
 Deterministic validation and policy own every consequential decision. The drafting provider sees
 only minimized, approved context; independent guards validate its output; human approval and

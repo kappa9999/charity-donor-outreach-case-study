@@ -71,7 +71,7 @@ Evidence recorded on 2026-08-02 against policy version `2026-08-01.9`:
   scripts. Bandit reported zero low-, medium-, or high-severity issues after six narrowly justified
   scanner exclusions.
 - The wheel and source archive passed build, metadata, and wheel-content checks. The architecture
-  SVG passed strict structural validation and rendered legibly at its native and README sizes.
+  graphic was inspected at its native 1,672-by-941 resolution and at an 850-pixel README width.
 - The repository validator, the skill-creator validator, and the official Agent Skills reference
   validator all accepted `charity-donor-outreach`.
 - An isolated dependency audit reported no known vulnerabilities. An exact prospective-file

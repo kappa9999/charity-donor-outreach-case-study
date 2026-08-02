@@ -4,7 +4,6 @@ import json
 import re
 import subprocess
 import sys
-import xml.etree.ElementTree as ET
 from copy import deepcopy
 from pathlib import Path
 from typing import Any
@@ -821,35 +820,23 @@ def test_documented_machine_vocabulary_matches_runtime_enums() -> None:
 
 
 def test_architecture_visual_is_accessible_and_referenced() -> None:
-    svg_path = ROOT / "docs" / "architecture-flow.svg"
-    svg = svg_path.read_text(encoding="utf-8")
-    root = ET.fromstring(svg)
-    namespace = {"svg": "http://www.w3.org/2000/svg"}
-    assert root.tag == "{http://www.w3.org/2000/svg}svg"
-    assert root.attrib["viewBox"] == "0 0 1280 780"
-    assert root.find("svg:title", namespace) is not None
-    assert root.find("svg:desc", namespace) is not None
-    assert not root.findall(".//svg:script", namespace)
-    assert not root.findall(".//svg:foreignObject", namespace)
-    assert not root.findall(".//svg:image", namespace)
-    assert len(svg.encode("utf-8")) < 40_000
-    for label in [
-        "Validate inputs",
-        "Decide policy",
-        "Minimize context",
-        "Draft provider",
-        "Guard + result",
-        "Outside this repository",
-    ]:
-        assert label in svg
+    png_path = ROOT / "docs" / "architecture-flow.png"
+    png = png_path.read_bytes()
+    assert png.startswith(b"\x89PNG\r\n\x1a\n")
+    assert png[12:16] == b"IHDR"
+    assert (int.from_bytes(png[16:20], "big"), int.from_bytes(png[20:24], "big")) == (
+        1_672,
+        941,
+    )
+    assert len(png) < 1_000_000
 
-    mermaid = (ROOT / "docs" / "architecture-flow.mmd").read_text(encoding="utf-8")
     architecture = (ROOT / "docs" / "ARCHITECTURE.md").read_text(encoding="utf-8")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    assert "flowchart TB" in mermaid
-    assert "architecture-flow.svg" in architecture
-    assert "architecture-flow.mmd" in architecture
-    assert "docs/architecture-flow.svg" in readme
+    alt_text = "Controlled donor outreach operating model"
+    assert f"![{alt_text}](architecture-flow.png)" in architecture
+    assert f"![{alt_text}](docs/architecture-flow.png)" in readme
+    assert not (ROOT / "docs" / "architecture-flow.svg").exists()
+    assert not (ROOT / "docs" / "architecture-flow.mmd").exists()
 
 
 def test_local_markdown_links_resolve() -> None:

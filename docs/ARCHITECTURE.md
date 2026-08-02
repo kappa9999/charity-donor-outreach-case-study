@@ -2,11 +2,12 @@
 
 ## Request path
 
-![Controlled donor outreach request path](architecture-flow.svg)
+![Controlled donor outreach operating model](architecture-flow.png)
 
-The diagram is a code-native SVG sized for normal GitHub review. Its editable graph model is
-committed as [architecture-flow.mmd](architecture-flow.mmd). Both artifacts describe the same six
-stages and the same fail-closed exits; the SVG is the reviewer-facing rendering.
+The overview keeps the reviewer path to seven stages: receive inputs, validate them, decide policy,
+minimize context, draft inside an isolated provider boundary, verify the candidate, and retain
+human approval. The component and failure sections below define the exact contracts behind that
+view.
 
 ## Components
 
