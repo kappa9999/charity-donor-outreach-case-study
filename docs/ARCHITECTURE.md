@@ -2,7 +2,7 @@
 
 ## Request path
 
-![Policy-gated donor outreach system map](architecture-flow.png)
+![Policy-gated donor outreach system map](outreach-system-map.png)
 
 The system map shows the typed handoffs and trust boundaries. Components labelled `DETERMINISTIC`
 own validation, policy, minimization, output checks, and result construction. The dashed

@@ -820,7 +820,7 @@ def test_documented_machine_vocabulary_matches_runtime_enums() -> None:
 
 
 def test_architecture_visual_is_accessible_and_referenced() -> None:
-    png_path = ROOT / "docs" / "architecture-flow.png"
+    png_path = ROOT / "docs" / "outreach-system-map.png"
     png = png_path.read_bytes()
     assert png.startswith(b"\x89PNG\r\n\x1a\n")
     assert png[12:16] == b"IHDR"
@@ -833,8 +833,9 @@ def test_architecture_visual_is_accessible_and_referenced() -> None:
     architecture = (ROOT / "docs" / "ARCHITECTURE.md").read_text(encoding="utf-8")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     alt_text = "Policy-gated donor outreach system map"
-    assert f"![{alt_text}](architecture-flow.png)" in architecture
-    assert f"![{alt_text}](docs/architecture-flow.png)" in readme
+    assert f"![{alt_text}](outreach-system-map.png)" in architecture
+    assert f"![{alt_text}](docs/outreach-system-map.png)" in readme
+    assert not (ROOT / "docs" / "architecture-flow.png").exists()
     assert not (ROOT / "docs" / "architecture-flow.svg").exists()
     assert not (ROOT / "docs" / "architecture-flow.mmd").exists()
 
