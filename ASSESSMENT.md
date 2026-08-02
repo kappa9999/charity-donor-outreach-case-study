@@ -16,6 +16,9 @@ The rewrite turns the artifact into a narrow workflow contract:
 4. reject output that violates machine-checkable invariants;
 5. return a structured result for human review.
 
+The requested outcomes—consistent, reliable, scalable drafts—come from explicit contracts,
+deterministic decisions, failure isolation, and human review rather than additional prompt detail.
+
 ## Improvements and impact
 
 | Problem in the supplied artifact | Refinement | Operational impact |
@@ -37,7 +40,7 @@ The rewrite turns the artifact into a narrow workflow contract:
 | Arbitrary three-letter values could masquerade as currencies | Pin runtime and schemas to the active ISO 4217 List One snapshot | Rejects fictional/stale codes and keeps cross-version interpretation stable |
 | High-value relationships were automated like routine records | Require review for configured segments and ask thresholds | Keeps relationship judgment with fundraising staff |
 | HTML prose was the only output | Make JSON the system of record and plain-text copy one optional field | Supports integration, audit, retries, and review queues |
-| One bad row could compromise a batch | Validate and process each line independently; contain provider exceptions | Preserves throughput while making each failure actionable |
+| No scale/failure-isolation model existed; one bad row could compromise a batch | Validate and process each bounded JSONL record independently, contain provider exceptions, and replace output only after a complete run | Supports growing lists without one record stopping the run or leaving partial output |
 | A provider could mutate frozen nested objects via low-level Python access | Give it a detached deep copy while retaining separate guard, policy, result, and campaign authority | Prevents one adapter call from corrupting its ask or a later record |
 | Stateful mappings and hostile scalar subclasses could change across reads | Snapshot bounded inputs/candidates once with base-type materialization before validation, hashing, or guard checks | Makes each security decision operate on one stable representation |
 | No post-generation controls existed | Structurally anchor salutation, purpose, facts, ask, CTA, spacing, and sign-off; check provenance, claims, URLs/URIs, multi-currency money, Unicode text safety, NFKC/NFKD security views, and pressure | Withholds non-conforming drafts before staff can mistake them for approved output |

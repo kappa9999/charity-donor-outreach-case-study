@@ -10,6 +10,8 @@ eligibility, ask amounts, approved facts, review gates, and output validation ar
 outside the drafting provider. The project never sends a message.
 
 All examples are synthetic. No real donor data, credentials, or organization claims are included.
+This repository is the complete public submission and can be reviewed directly in GitHub; no
+download or local HTML viewer is required.
 
 ## Reviewer path
 
@@ -18,6 +20,24 @@ All examples are synthetic. No real donor data, credentials, or organization cla
 3. Review the [runtime architecture](docs/ARCHITECTURE.md) and trust boundaries.
 4. Inspect the [behavioral evidence](docs/QUALITY.md) and tests.
 5. Run the deterministic example below.
+
+## Direct response to the brief
+
+The supplied scenario names the ASPCA. The rewritten skill is intentionally
+organization-portable: approved organization and campaign facts are structured inputs rather
+than hard-coded claims. The synthetic examples demonstrate the workflow without inventing or
+publishing statements about the real charity.
+
+| Requested outcome | Direct answer |
+| --- | --- |
+| Assess the supplied skill | [ASSESSMENT.md](ASSESSMENT.md) identifies the control, data, quality, and operating-model gaps. |
+| Explain improvements, rationale, and impact | The assessment's problem/refinement/impact matrix and decision sections make each tradeoff explicit. |
+| Rewrite the skill | [charity-donor-outreach/SKILL.md](charity-donor-outreach/SKILL.md) is the portable rewrite, supported by focused references and executable schemas. |
+| Produce consistent, reliable outputs at growing-list scale | Deterministic policy and output guards provide consistency; strict contracts, review states, and adversarial tests provide reliability; per-record JSONL isolation, atomic writes, resource ceilings, and a replaceable provider seam provide scale. |
+
+The assessment and rewritten skill are the two requested deliverables. The Python package,
+architecture, schemas, synthetic examples, and quality evidence are supplementary proof that the
+design is implementable and testable, not hidden requirements for using the portable skill.
 
 ## Safety properties
 
