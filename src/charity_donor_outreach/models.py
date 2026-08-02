@@ -406,7 +406,7 @@ class ContractModel(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def reject_invalid_unicode_scalars(cls, value: Any) -> Any:
+    def reject_invalid_unicode_scalars(_cls, value: Any) -> Any:
         if contains_invalid_unicode_scalar(value):
             raise ValueError("text must contain valid Unicode scalar values")
         return value
@@ -707,7 +707,7 @@ class CallToAction(ContractModel):
 
     @field_validator("url", mode="before")
     @classmethod
-    def require_https_url(cls, value: Any) -> Any:
+    def require_https_url(_cls, value: Any) -> Any:
         if not isinstance(value, str) or value != value.strip():
             raise ValueError("call-to-action URL must be a trimmed string")
         if not value.startswith("https://"):

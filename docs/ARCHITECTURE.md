@@ -2,23 +2,11 @@
 
 ## Request path
 
-```mermaid
-flowchart LR
-  A[Campaign JSON plus donor JSONL] --> B[Strict JSON plus schema validation]
-  B -->|Invalid| X[Invalid result<br/>No provider call]
-  B --> C[Deterministic policy gate]
-  C -->|Blocked or suppressed| Y[Structured stop result<br/>No provider call]
-  C -->|Allow or review| D[Minimized DraftRequest]
-  D --> E[Draft provider]
-  E -->|Exception| Z[Provider error<br/>Continue batch]
-  E --> F[Output guard]
-  F -->|Fail| Q[Quality rejected<br/>Draft withheld]
-  F -->|Pass| G[Built-in template may be draft ready<br/>All other providers require review]
-  G --> H[Human approval and delivery<br/>Outside this repository]
-```
+![Controlled donor outreach request path](architecture-flow.svg)
 
-The graph source is also committed as
-[architecture-flow.mmd](architecture-flow.mmd) for deterministic validation.
+The diagram is a code-native SVG sized for normal GitHub review. Its editable graph model is
+committed as [architecture-flow.mmd](architecture-flow.mmd). Both artifacts describe the same six
+stages and the same fail-closed exits; the SVG is the reviewer-facing rendering.
 
 ## Components
 

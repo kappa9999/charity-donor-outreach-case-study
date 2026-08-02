@@ -68,6 +68,9 @@ _MAX_DIRECT_FACTS = 25
 _MAX_VALIDATION_ISSUES = 25
 _MAX_DIRECT_INTEGER_BITS = (10**128).bit_length()
 _MAX_DIRECT_DECIMAL_STORAGE_BYTES = 4_096
+_AT_SIGN = "@"
+_DOT = "."
+_COLON = ":"
 _DECLARED_DONOR_LOCATION_FIELDS = frozenset(
     {
         "donor_id",
@@ -1677,7 +1680,7 @@ def _advance_domain_grammar(
                 return None
             phase = 1
         elif phase == 1:
-            if token != "@":
+            if token != _AT_SIGN:
                 return None
             phase = 2
         elif phase == 2:
@@ -1689,7 +1692,7 @@ def _advance_domain_grammar(
                 ascii_tld in IANA_ROOT_ZONE_TLD_SET or ascii_tld.startswith("xn--")
             )
             phase = 3
-        elif token == ".":
+        elif token == _DOT:
             phase = 2
             last_label_is_tld = False
         else:
@@ -1723,7 +1726,7 @@ def _advance_ipv4_grammar(
             if octet_count > 4:
                 return None
             expect_octet = False
-        elif token == ".":
+        elif token == _DOT:
             expect_octet = True
         else:
             return None
@@ -1736,7 +1739,7 @@ def _ipv4_grammar_accepting(state: _IPv4GrammarState) -> bool:
 
 
 def _advance_ipv6_grammar(value: str, sequence: tuple[str, ...]) -> str | None:
-    if any(token != ":" and re.fullmatch(r"[0-9a-f]{1,4}", token) is None for token in sequence):
+    if any(token != _COLON and re.fullmatch(r"[0-9a-f]{1,4}", token) is None for token in sequence):
         return None
     candidate = value + "".join(sequence)
     if len(candidate) > 45 or ":::" in candidate or candidate.count("::") > 1:
@@ -1977,7 +1980,7 @@ def _components_reconstruct_defanged_contact(
             sequence
             for sequence in sequences
             if all(
-                token == ":" or re.fullmatch(r"[0-9a-f]{1,4}", token) is not None
+                token == _COLON or re.fullmatch(r"[0-9a-f]{1,4}", token) is not None
                 for token in sequence
             )
         )
@@ -2170,7 +2173,8 @@ class OutreachService:
                     excluded_fact_ids=[],
                 ),
             )
-        assert record_snapshot is not None
+        if record_snapshot is None:
+            raise RuntimeError("input snapshot is missing without a structural rejection")
         try:
             donor = DonorRecord.model_validate(record_snapshot)
         except ValidationError as error:
@@ -3138,7 +3142,8 @@ def _iterative_fingerprint(value: Any) -> str:
                 stack.append(("token", ["key", key_token]))
             continue
 
-        assert isinstance(current, Sequence)
+        if not isinstance(current, Sequence):
+            raise TypeError("fingerprint traversal reached an unsupported container")
         emit(["array_start", len(current)])
         stack.append(("token", ["array_end"]))
         for item in reversed(current):

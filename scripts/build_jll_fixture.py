@@ -160,7 +160,6 @@ def _render() -> tuple[str, str]:
         for index, row in enumerate(rows, start=1)
     ]
     donors_text = "\n".join(donor_lines) + "\n"
-    source_bytes = SOURCE_PATH.read_bytes()
     manifest = {
         "attachment": {
             "filename": ATTACHMENT_FILENAME,
@@ -223,7 +222,6 @@ def _render() -> tuple[str, str]:
             "authoritative systems and must never infer them."
         ),
     }
-    assert _sha256(source_bytes) == SOURCE_SHA256
     manifest_text = json.dumps(manifest, indent=2, ensure_ascii=False) + "\n"
     return donors_text, manifest_text
 

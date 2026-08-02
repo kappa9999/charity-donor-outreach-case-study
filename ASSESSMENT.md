@@ -152,7 +152,8 @@ permanent architecture.
 
 ## Deliberate non-goals
 
-- No real donor data or copied donor table
+- No real donor data; the only donor table is the exercise's mocked sample, preserved with explicit
+  provenance and separate synthetic operational controls
 - No automatic email or postal delivery
 - No demographic, wealth, propensity, or sensitive-trait inference
 - No provider keys or vendor-specific SDK

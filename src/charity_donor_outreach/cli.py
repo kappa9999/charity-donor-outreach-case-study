@@ -82,8 +82,8 @@ def _generate(args: argparse.Namespace) -> int:
         with AtomicJsonlWriter(args.output) as writer:
             for line in iter_jsonl(args.donors):
                 if line.value is None:
-                    assert line.error_code is not None
-                    assert line.error_message is not None
+                    if line.error_code is None or line.error_message is None:
+                        raise StrictJsonError("invalid line is missing safe diagnostic metadata")
                     result = service.invalid_input_result(
                         record_index=line.line_number,
                         code=line.error_code,
@@ -96,6 +96,9 @@ def _generate(args: argparse.Namespace) -> int:
                 records += 1
                 counts[result.status.value] += 1
                 has_failure = has_failure or result.status in failing_statuses
+    except StrictJsonError:
+        print("input processing failed", file=sys.stderr)
+        return 2
     except (OSError, UnicodeError):
         print("input or output file operation failed", file=sys.stderr)
         return 2

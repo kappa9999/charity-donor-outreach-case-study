@@ -1,14 +1,14 @@
 """Pinned IANA root-zone TLDs for bounded contact-detail detection.
 
 Source: https://data.iana.org/TLD/tlds-alpha-by-domain.txt
-IANA version: 2026080100
-Last updated: Sat Aug  1 07:07:01 2026 UTC
-SHA-256: 1671b6044a0a918d39a986eb7d4b868655ed832af17dbb85217a1b73297ccf85
+IANA version: 2026080200
+Last updated: Sun Aug  2 07:07:01 2026 UTC
+SHA-256: d568394c6781a1ae9abbe12f5f72f3a6e241a6fa26542fc90d1a82c929b9ff9e
 """
 
-IANA_ROOT_ZONE_VERSION = "2026080100"
-IANA_ROOT_ZONE_SHA256 = (
-    "1671b6044a0a918d39a986eb7d4b868655ed832af17dbb85217a1b73297ccf85"  # pragma: allowlist secret
+IANA_ROOT_ZONE_VERSION = "2026080200"
+IANA_ROOT_ZONE_SHA256 = (  # pragma: allowlist secret
+    "d568394c6781a1ae9abbe12f5f72f3a6e241a6fa26542fc90d1a82c929b9ff9e"  # pragma: allowlist secret
 )
 IANA_ROOT_ZONE_TLDS = tuple(
     """

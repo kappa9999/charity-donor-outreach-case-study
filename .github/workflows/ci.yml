@@ -51,6 +51,9 @@ jobs:
       - name: Type check
         run: python -m mypy src scripts
 
+      - name: Static security analysis
+        run: python -m bandit -r src scripts -ii
+
       - name: Run reviewer examples
         run: python scripts/run_examples.py --output-dir out/ci-reviewer-demo
 

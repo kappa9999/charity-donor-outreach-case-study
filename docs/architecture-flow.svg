@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 780" role="img" aria-labelledby="title desc">
+  <title id="title">Controlled donor outreach request path</title>
+  <desc id="desc">Six-stage donor outreach workflow. Untrusted campaign and donor inputs pass through strict validation, deterministic policy, context minimization, an isolated drafting provider, and an independent output guard. Invalid, blocked, suppressed, provider-error, and quality-rejected paths fail closed. Human approval and delivery remain outside the repository.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <rect width="1280" height="780" fill="#ffffff"/>
+
+  <g font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" fill="#0f172a">
+    <text x="60" y="52" font-size="34" font-weight="700">Controlled donor outreach request path</text>
+    <text x="60" y="78" font-size="16" fill="#475569">
+      <tspan x="60" dy="0">Deterministic decisions surround an isolated provider.</tspan>
+      <tspan x="60" dy="22">Delivery stays outside this repository.</tspan>
+    </text>
+
+    <g font-size="13" font-weight="600">
+      <rect x="878" y="39" width="118" height="30" rx="15" fill="#eff6ff" stroke="#2563eb"/>
+      <text x="937" y="59" text-anchor="middle" fill="#1d4ed8">Deterministic</text>
+      <rect x="1008" y="39" width="120" height="30" rx="15" fill="#f5f3ff" stroke="#6d28d9" stroke-dasharray="5 3"/>
+      <text x="1068" y="59" text-anchor="middle" fill="#5b21b6">Provider boundary</text>
+      <rect x="1140" y="39" width="80" height="30" rx="15" fill="#fff7ed" stroke="#c2410c"/>
+      <text x="1180" y="59" text-anchor="middle" fill="#9a3412">Fail closed</text>
+    </g>
+
+    <rect x="40" y="120" width="1200" height="472" rx="24" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="70" y="151" font-size="13" font-weight="700" letter-spacing="1.5" fill="#64748b">AUTOMATED REFERENCE CONTROL PLANE</text>
+
+    <g fill="none" stroke="#475569" stroke-width="3" marker-end="url(#arrow)">
+      <path d="M 400 255 H 467"/>
+      <path d="M 805 255 H 872"/>
+      <path d="M 1045 330 V 365 H 235 V 402"/>
+      <path d="M 400 485 H 467"/>
+      <path d="M 805 485 H 872"/>
+      <path d="M 1045 560 V 636"/>
+    </g>
+    <g font-size="13" font-weight="600" fill="#475569">
+      <text x="838" y="245" text-anchor="middle">valid</text>
+      <text x="638" y="357" text-anchor="middle">eligible</text>
+      <text x="838" y="475" text-anchor="middle">candidate</text>
+      <text x="1080" y="620">passing draft</text>
+    </g>
+
+    <g>
+      <rect x="70" y="180" width="330" height="150" rx="16" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>
+      <circle cx="103" cy="215" r="18" fill="#475569"/>
+      <text x="103" y="221" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">1</text>
+      <text x="132" y="221" font-size="20" font-weight="700">Untrusted inputs</text>
+      <text x="100" y="254" font-size="16" fill="#334155">
+        <tspan x="100" dy="0">Campaign JSON + donor JSONL</tspan>
+        <tspan x="100" dy="23">Source records are data, never instructions</tspan>
+      </text>
+      <line x1="100" y1="299" x2="370" y2="299" stroke="#cbd5e1"/>
+      <text x="100" y="319" font-size="13.5" font-weight="600" fill="#475569">SOURCE BOUNDARY</text>
+    </g>
+
+    <g>
+      <rect x="475" y="180" width="330" height="150" rx="16" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+      <circle cx="508" cy="215" r="18" fill="#2563eb"/>
+      <text x="508" y="221" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">2</text>
+      <text x="537" y="221" font-size="20" font-weight="700">Validate inputs</text>
+      <text x="505" y="254" font-size="16" fill="#334155">
+        <tspan x="505" dy="0">Strict JSON, schemas, Unicode safety</tspan>
+        <tspan x="505" dy="23">and deterministic resource ceilings</tspan>
+      </text>
+      <line x1="505" y1="299" x2="775" y2="299" stroke="#bfdbfe"/>
+      <text x="505" y="319" font-size="13.5" font-weight="700" fill="#9a3412">STOP: INVALID · NO PROVIDER CALL</text>
+    </g>
+
+    <g>
+      <rect x="880" y="180" width="330" height="150" rx="16" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+      <circle cx="913" cy="215" r="18" fill="#2563eb"/>
+      <text x="913" y="221" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">3</text>
+      <text x="942" y="221" font-size="20" font-weight="700">Decide policy</text>
+      <text x="910" y="254" font-size="16" fill="#334155">
+        <tspan x="910" dy="0">Permission, cadence, ask, safe facts</tspan>
+        <tspan x="910" dy="23">and review gates are deterministic</tspan>
+      </text>
+      <line x1="910" y1="299" x2="1180" y2="299" stroke="#bfdbfe"/>
+      <text x="910" y="319" font-size="13.5" font-weight="700" fill="#9a3412">STOP: BLOCKED / SUPPRESSED · NO CALL</text>
+    </g>
+
+    <g>
+      <rect x="70" y="410" width="330" height="150" rx="16" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+      <circle cx="103" cy="445" r="18" fill="#2563eb"/>
+      <text x="103" y="451" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">4</text>
+      <text x="132" y="451" font-size="20" font-weight="700">Minimize context</text>
+      <text x="100" y="484" font-size="16" fill="#334155">
+        <tspan x="100" dy="0">Approved purpose, ask, sender, CTA</tspan>
+        <tspan x="100" dy="23">and provenance-labelled facts only</tspan>
+      </text>
+      <line x1="100" y1="529" x2="370" y2="529" stroke="#bfdbfe"/>
+      <text x="100" y="549" font-size="13.5" font-weight="600" fill="#1d4ed8">NO CONTACTS · CONSENT · RAW GIVING</text>
+    </g>
+
+    <g>
+      <rect x="475" y="410" width="330" height="150" rx="16" fill="#f5f3ff" stroke="#6d28d9" stroke-width="2" stroke-dasharray="7 5"/>
+      <circle cx="508" cy="445" r="18" fill="#6d28d9"/>
+      <text x="508" y="451" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">5</text>
+      <text x="537" y="451" font-size="20" font-weight="700">Draft provider</text>
+      <text x="505" y="484" font-size="16" fill="#334155">
+        <tspan x="505" dy="0">Built-in template proves the boundary</tspan>
+        <tspan x="505" dy="23">Replaceable model adapters stay untrusted</tspan>
+      </text>
+      <line x1="505" y1="529" x2="775" y2="529" stroke="#ddd6fe"/>
+      <text x="505" y="549" font-size="13.5" font-weight="700" fill="#5b21b6">EXCEPTION: PROVIDER_ERROR · CONTINUE</text>
+    </g>
+
+    <g>
+      <rect x="880" y="410" width="330" height="150" rx="16" fill="#ecfdf5" stroke="#047857" stroke-width="2"/>
+      <circle cx="913" cy="445" r="18" fill="#047857"/>
+      <text x="913" y="451" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">6</text>
+      <text x="942" y="451" font-size="20" font-weight="700">Guard + result</text>
+      <text x="910" y="484" font-size="16" fill="#334155">
+        <tspan x="910" dy="0">Check structure, claims, ask, URLs,</tspan>
+        <tspan x="910" dy="23">text safety and provenance</tspan>
+      </text>
+      <line x1="910" y1="529" x2="1180" y2="529" stroke="#a7f3d0"/>
+      <text x="910" y="549" font-size="13.5" font-weight="700" fill="#065f46">FAIL: WITHHOLD · PASS: STRUCTURED STATE</text>
+    </g>
+
+    <text x="70" y="637" font-size="15" font-weight="700" fill="#334155">Non-negotiable invariants</text>
+    <g font-size="13.5" font-weight="600" fill="#334155">
+      <rect x="70" y="655" width="185" height="38" rx="19" fill="#f8fafc" stroke="#94a3b8"/>
+      <text x="162.5" y="679" text-anchor="middle">Policy before prose</text>
+      <rect x="270" y="655" width="225" height="38" rx="19" fill="#f8fafc" stroke="#94a3b8"/>
+      <text x="382.5" y="679" text-anchor="middle">No provider call on stop</text>
+      <rect x="510" y="655" width="190" height="38" rx="19" fill="#f8fafc" stroke="#94a3b8"/>
+      <text x="605" y="679" text-anchor="middle">No delivery adapter</text>
+    </g>
+
+    <g>
+      <rect x="880" y="645" width="330" height="90" rx="16" fill="#0f172a" stroke="#0f172a" stroke-width="2"/>
+      <text x="910" y="681" font-size="20" font-weight="700" fill="#ffffff">Human approval + delivery</text>
+      <text x="910" y="707" font-size="14" fill="#cbd5e1">
+        <tspan x="910" dy="0">Separate downstream system</tspan>
+        <tspan x="910" dy="19">Outside this repository</tspan>
+      </text>
+    </g>
+
+    <text x="70" y="748" font-size="12.5" font-weight="600" letter-spacing="1" fill="#64748b">CONTROL PLANE - EXPLICIT STATE PER RECORD</text>
+  </g>
+</svg>

@@ -6,18 +6,43 @@ import hashlib
 import re
 import textwrap
 from pathlib import Path
+from urllib.parse import urlsplit
 from urllib.request import urlopen
 
 SOURCE_URL = "https://data.iana.org/TLD/tlds-alpha-by-domain.txt"
 OUTPUT = Path(__file__).parents[1] / "src" / "charity_donor_outreach" / "_iana_tlds.py"
+MAX_SOURCE_BYTES = 256 * 1024
+SOURCE_HOST = "data.iana.org"
 VERSION_PATTERN = re.compile(r"^# Version (?P<version>[0-9]{10}), Last Updated (?P<updated>.+)$")
+
+
+def _download_source() -> bytes:
+    """Download the fixed HTTPS source without accepting a host or scheme redirect."""
+
+    configured = urlsplit(SOURCE_URL)
+    if configured.scheme != "https" or configured.hostname != SOURCE_HOST:
+        raise RuntimeError("unexpected IANA source URL")
+    # SOURCE_URL is a module constant checked above; the final URL is checked before use.
+    with urlopen(SOURCE_URL, timeout=30) as response:  # nosec B310
+        final = urlsplit(response.geturl())
+        if (
+            getattr(response, "status", None) != 200
+            or final.scheme != "https"
+            or final.hostname != SOURCE_HOST
+            or final.username is not None
+            or final.password is not None
+        ):
+            raise RuntimeError("unexpected IANA source response")
+        payload = bytes(response.read(MAX_SOURCE_BYTES + 1))
+    if len(payload) > MAX_SOURCE_BYTES:
+        raise RuntimeError("IANA source exceeds the download limit")
+    return payload
 
 
 def main() -> None:
     """Download, validate, and render the official ASCII root-zone labels."""
 
-    with urlopen(SOURCE_URL, timeout=30) as response:
-        payload = response.read()
+    payload = _download_source()
     text = payload.decode("ascii")
     lines = text.splitlines()
     metadata = VERSION_PATTERN.fullmatch(lines[0])

@@ -5,8 +5,11 @@ from __future__ import annotations
 import hashlib
 import re
 import textwrap
-import xml.etree.ElementTree as ET
+
+# The exact hash and size are verified before parsing.
+import xml.etree.ElementTree as ET  # nosec B405
 from pathlib import Path
+from urllib.parse import urlsplit
 from urllib.request import urlopen
 
 SOURCE_COMMIT = "99ade73f8465edd4a71969c8899bc45a854ed100"  # pragma: allowlist secret
@@ -18,6 +21,8 @@ SOURCE_URL = (
     f"{SOURCE_COMMIT}/resources/PhoneNumberMetadata.xml"
 )
 OUTPUT = Path(__file__).parents[1] / "src" / "charity_donor_outreach" / "_e164.py"
+MAX_SOURCE_BYTES = 5 * 1024 * 1024
+SOURCE_HOST = "raw.githubusercontent.com"
 _LENGTH_EXPRESSION = re.compile(r"(?:[0-9]+|\[[0-9]+-[0-9]+\])(?:,(?:[0-9]+|\[[0-9]+-[0-9]+\]))*")
 
 
@@ -35,7 +40,8 @@ def _possible_lengths(expression: str) -> set[int]:
 
 
 def _parse_metadata(payload: bytes) -> dict[str, frozenset[int]]:
-    root = ET.fromstring(payload)
+    # The caller verifies the exact pinned SHA-256 before parsing this size-capped payload.
+    root = ET.fromstring(payload)  # nosec B314
     calling_codes: dict[str, set[int]] = {}
     for territory in root.findall(".//territory"):
         calling_code = territory.attrib.get("countryCode")
@@ -63,6 +69,29 @@ def _parse_metadata(payload: bytes) -> dict[str, frozenset[int]]:
     ):
         raise RuntimeError("unexpected E.164 metadata contents")
     return normalized
+
+
+def _download_source() -> bytes:
+    """Download the fixed HTTPS source without accepting a host or scheme redirect."""
+
+    configured = urlsplit(SOURCE_URL)
+    if configured.scheme != "https" or configured.hostname != SOURCE_HOST:
+        raise RuntimeError("unexpected E.164 source URL")
+    # SOURCE_URL is a module constant checked above; the final URL is checked before use.
+    with urlopen(SOURCE_URL, timeout=30) as response:  # nosec B310
+        final = urlsplit(response.geturl())
+        if (
+            getattr(response, "status", None) != 200
+            or final.scheme != "https"
+            or final.hostname != SOURCE_HOST
+            or final.username is not None
+            or final.password is not None
+        ):
+            raise RuntimeError("unexpected E.164 source response")
+        payload = bytes(response.read(MAX_SOURCE_BYTES + 1))
+    if len(payload) > MAX_SOURCE_BYTES:
+        raise RuntimeError("E.164 source exceeds the download limit")
+    return payload
 
 
 def _quoted_code_lines(codes: tuple[str, ...]) -> list[str]:
@@ -122,8 +151,7 @@ def _render(metadata: dict[str, frozenset[int]]) -> str:
 def main() -> None:
     """Download, verify, parse, and render the pinned numbering metadata."""
 
-    with urlopen(SOURCE_URL, timeout=30) as response:
-        payload = response.read()
+    payload = _download_source()
     digest = hashlib.sha256(payload).hexdigest()
     if digest != SOURCE_SHA256:
         raise RuntimeError(f"source SHA-256 mismatch: {digest}")

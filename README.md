@@ -47,51 +47,27 @@ claim-approval controls. Its executable fixture keeps the original table separat
 added demonstration control; production onboarding must obtain those values from authoritative
 systems rather than copy the test defaults.
 
+## System at a glance
+
+![Controlled donor outreach request path](docs/architecture-flow.svg)
+
+Deterministic validation and policy own every consequential decision. The drafting provider sees
+only minimized, approved context; independent guards validate its output; human approval and
+delivery remain outside this repository. See [the architecture detail](docs/ARCHITECTURE.md).
+
 ## Safety properties
 
-- **Fail closed:** denied or unknown permission, missing contact data, ambiguous JSON, invalid
-  inputs, future-dated ask history, currency mismatch, and contact-frequency conflicts produce no
-  provider call and no draft. Dates use exact YYYY-MM-DD strings; financial JSON uses canonical
-  ASCII-digit two-decimal strings and an active ISO 4217 List One code, never floats, fictional
-  currency codes, or mixed-script digits. Email contactability uses
-  a conservative ASCII dot-atom and DNS-label contract. Contact fields are presence/syntax checks,
-  not claims that a mailbox or postal address is deliverable.
-- **Policy before prose:** the provider cannot decide consent, eligibility, ask amount, or
-  whether review is required.
-- **Data minimization:** email addresses, postal addresses, donor IDs, consent/suppression fields,
-  internal policy controls, and raw giving history are not included in the provider request.
-  Joined identity views, fact IDs, and fact text are checked for exact structured contact reuse,
-  literal/defanged/encoded contact details, IP addresses, URI schemes, international addresses,
-  word/vanity phones, policy controls, and giving-history labels. Bounded component grammars also
-  close reordered, non-adjacent field splits that reconstruct those protected forms, control
-  language, solicitation, or currency-plus-amount content. Sensitive excluded fact IDs are
-  represented in audit only by `redacted.sensitive-fact-id`.
-- **Grounded claims:** only explicitly approved, provenance-labelled facts with a closed
-  `campaign|organization|donor|crm` identifier namespace reach the provider. Instruction-like,
-  policy-control-like, raw-giving, solicitation-like, monetary, and contact-like fact text is
-  removed; unsafe identity text is blocked before request construction.
-- **Draft quarantine:** the salutation, purpose, fact paragraphs, ask, call-to-action, and terminal
-  sign-off are structurally checked. Unsupported URLs/URI schemes, numbers, claims, HTML,
-  pressure, extra solicitation/instruction copy, and internal policy/giving labels cause the
-  entire candidate to be withheld. Unicode control/format characters, default-ignorable marks,
-  Unicode 14 unassigned/private-use code points, and malformed blank-line structure are rejected
-  at the contract boundary. Security scans use both an NFKC view and a mark-stripped NFKD skeleton
-  to expose bounded compatibility/combining-mark disguises while retaining approved display text.
-- **Human control:** major/principal relationships, high-value asks, and every non-built-in
-  provider output are review-required. Delivery is intentionally out of scope.
-- **Batch isolation:** one invalid record or provider failure does not stop the remaining records;
-  results stream through a temporary file and replace the destination only after a complete run.
-  Campaign files and individual donor lines are capped at 1 MiB; direct object graphs, nested
-  collections, facts, provider-returned mappings, and emitted diagnostics have deterministic
-  resource ceilings. Direct mappings and provider candidates are snapshotted once into detached
-  plain structures before security decisions.
-- **Auditability:** every result records a policy version, input fingerprint, provider-call flag,
-  excluded fact IDs, and enum-constrained reason codes without logging raw donor data. Malformed
-  lines are fingerprinted from a digest of their raw bytes, not their contents. Sensitive fact IDs
-  use a fixed redaction sentinel; unknown input member names become `$extra` instead of being
-  echoed in diagnostics.
-  Fingerprints use type-tagged canonical encoding, keeping numeric tokens distinct from strings;
-  oversized direct objects use a bounded rejection summary.
+| Boundary | Enforced behavior |
+| --- | --- |
+| Permission and inputs | Denied/do-not-contact records are suppressed; unknown authority, missing data, malformed input, and policy conflicts stop before any provider call. |
+| Policy | Eligibility, cadence, fixed-point ask calculation, fact selection, and review gates are deterministic and provider-independent. |
+| Provider privacy | Donor IDs, contact data, consent controls, internal notes, and raw giving history never enter the drafting request. |
+| Claims and output | Only approved provenance-labelled facts may be used; unsupported claims, contacts, URLs, numbers, asks, unsafe text, or malformed structure quarantine the entire candidate. |
+| Human control | Relationship-managed/high-value drafts and every non-built-in provider result require review. `draft_ready` never grants delivery authority. |
+| Batch and audit | Records fail independently, output replacement is atomic, resource use is bounded, and audit fields use stable codes without copying raw donor content. |
+
+The detailed invariants, adversarial cases, and honest limits are mapped to tests in
+[Quality evidence](docs/QUALITY.md).
 
 ## Quick start
 
@@ -100,7 +76,7 @@ Requires Python 3.11 or newer.
 Create an isolated environment, then use its interpreter explicitly so activation state cannot
 select the wrong Python.
 
-**macOS/Linux**
+### macOS/Linux
 
 ```bash
 python -m venv --clear .venv-reviewer
@@ -108,7 +84,7 @@ python -m venv --clear .venv-reviewer
 .venv-reviewer/bin/python scripts/run_examples.py --output-dir out/reviewer-demo
 ```
 
-**Windows PowerShell**
+### Windows PowerShell
 
 ```powershell
 python -m venv --clear .venv-reviewer

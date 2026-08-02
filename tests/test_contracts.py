@@ -4,6 +4,7 @@ import json
 import re
 import subprocess
 import sys
+import xml.etree.ElementTree as ET
 from copy import deepcopy
 from pathlib import Path
 from typing import Any
@@ -66,10 +67,10 @@ UNSAFE_CTA_URLS = (
 
 
 def test_pinned_iana_root_zone_snapshot_is_complete_and_self_consistent() -> None:
-    assert IANA_ROOT_ZONE_VERSION == "2026080100"
+    assert IANA_ROOT_ZONE_VERSION == "2026080200"
     assert IANA_ROOT_ZONE_SHA256 == (
-        "1671b6044a0a918d39a986eb7d4b8686"  # pragma: allowlist secret
-        "55ed832af17dbb85217a1b73297ccf85"  # pragma: allowlist secret
+        "d568394c6781a1ae9abbe12f5f72f3a6"  # pragma: allowlist secret
+        "e241a6fa26542fc90d1a82c929b9ff9e"  # pragma: allowlist secret
     )
     assert len(IANA_ROOT_ZONE_TLDS) == len(IANA_ROOT_ZONE_TLD_SET) == 1_438
     assert tuple(sorted(IANA_ROOT_ZONE_TLDS)) == IANA_ROOT_ZONE_TLDS
@@ -819,10 +820,36 @@ def test_documented_machine_vocabulary_matches_runtime_enums() -> None:
     )
 
 
-def test_architecture_source_matches_embedded_mermaid() -> None:
-    source = (ROOT / "docs" / "architecture-flow.mmd").read_text(encoding="utf-8").strip()
-    document = (ROOT / "docs" / "ARCHITECTURE.md").read_text(encoding="utf-8")
-    assert source in document
+def test_architecture_visual_is_accessible_and_referenced() -> None:
+    svg_path = ROOT / "docs" / "architecture-flow.svg"
+    svg = svg_path.read_text(encoding="utf-8")
+    root = ET.fromstring(svg)
+    namespace = {"svg": "http://www.w3.org/2000/svg"}
+    assert root.tag == "{http://www.w3.org/2000/svg}svg"
+    assert root.attrib["viewBox"] == "0 0 1280 780"
+    assert root.find("svg:title", namespace) is not None
+    assert root.find("svg:desc", namespace) is not None
+    assert not root.findall(".//svg:script", namespace)
+    assert not root.findall(".//svg:foreignObject", namespace)
+    assert not root.findall(".//svg:image", namespace)
+    assert len(svg.encode("utf-8")) < 40_000
+    for label in [
+        "Validate inputs",
+        "Decide policy",
+        "Minimize context",
+        "Draft provider",
+        "Guard + result",
+        "Outside this repository",
+    ]:
+        assert label in svg
+
+    mermaid = (ROOT / "docs" / "architecture-flow.mmd").read_text(encoding="utf-8")
+    architecture = (ROOT / "docs" / "ARCHITECTURE.md").read_text(encoding="utf-8")
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    assert "flowchart TB" in mermaid
+    assert "architecture-flow.svg" in architecture
+    assert "architecture-flow.mmd" in architecture
+    assert "docs/architecture-flow.svg" in readme
 
 
 def test_local_markdown_links_resolve() -> None:
@@ -848,6 +875,7 @@ def test_public_surface_contains_source_artifacts_only() -> None:
     excluded_roots = {
         ".git",
         ".mypy_cache",
+        ".playwright-cli",
         ".pytest_cache",
         ".ruff_cache",
         ".venv",
@@ -855,6 +883,7 @@ def test_public_surface_contains_source_artifacts_only() -> None:
         "build",
         "dist",
         "out",
+        "output",
     }
     visible_files = [
         path

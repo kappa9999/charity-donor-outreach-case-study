@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import argparse
 import json
-import subprocess
+
+# Commands use fixed argv, no shell, and the active interpreter.
+import subprocess  # nosec B404
 import sys
 from collections.abc import Sequence
 from pathlib import Path
@@ -28,7 +30,8 @@ DATASETS: Final = (
 
 
 def _run(command: list[str]) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(
+    # Every command is a fixed list built in this module.
+    return subprocess.run(  # nosec B603
         command,
         cwd=ROOT,
         check=False,
@@ -115,7 +118,8 @@ def _write_reviewer_summary(output_dir: Path, datasets: list[dict[str, Any]]) ->
     ]
     for dataset in datasets:
         statuses = dataset["statuses"]
-        assert isinstance(statuses, dict)
+        if not isinstance(statuses, dict):
+            raise RuntimeError(f"{dataset['name']} returned invalid status counts")
         status_text = ", ".join(f"{key}: {value}" for key, value in sorted(statuses.items()))
         lines.append(
             f"| {dataset['name']} | {dataset['records']} | {status_text} | "

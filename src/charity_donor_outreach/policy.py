@@ -1217,7 +1217,8 @@ def calculate_ask(donor: DonorRecord, campaign: CampaignBrief) -> Money | None:
     if policy.strategy == "none":
         return None
 
-    assert isinstance(policy, MultiplierAskPolicy)
+    if not isinstance(policy, MultiplierAskPolicy):
+        raise TypeError("validated campaign has an unsupported ask policy")
     last_gift = donor.giving.last_gift_amount
     if last_gift is None:
         return None

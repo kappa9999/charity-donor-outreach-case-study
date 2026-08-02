@@ -4,6 +4,7 @@ coverage.json
 htmlcov/
 .hypothesis/
 .mypy_cache/
+.playwright-cli/
 .pytest_cache/
 .ruff_cache/
 .venv/
@@ -13,3 +14,4 @@ __pycache__/
 build/
 dist/
 out/
+output/
