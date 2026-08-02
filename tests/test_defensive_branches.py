@@ -123,8 +123,44 @@ def test_domain_helpers_reject_unencodable_labels() -> None:
 
 def test_contact_boundary_hint_covers_word_numbers_and_sparse_digits() -> None:
     assert service_module._contact_boundary_hint("one two three four five six seven")
+    assert service_module._contact_boundary_hint("١٢٣٤٥٦٧")
     sparse_digits = ("x" * 60).join("1234567")
     assert service_module._contact_boundary_hint(sparse_digits) is False
+
+
+def test_boundary_candidate_iterators_deduplicate_identical_ordered_edges(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    categories = frozenset({"instruction"})
+    calls: list[tuple[str, str]] = []
+    original = service_module._ordered_boundary_candidates
+
+    def tracked(first: Any, second: Any, selected_categories: Any) -> Any:
+        calls.append((first.tail, second.head))
+        yield from original(first, second, selected_categories)
+
+    monkeypatch.setattr(service_module, "_ordered_boundary_candidates", tracked)
+    list(
+        service_module._iter_pairwise_boundary_candidates(
+            ("ordinary", "ignore", "instructions", "ordinary", "ignore", "instructions"),
+            categories,
+        )
+    )
+    assert calls
+    assert len(calls) == len(set(calls))
+    assert ("ignore", "ignore") in calls
+
+    calls.clear()
+    list(
+        service_module._iter_cross_boundary_candidates(
+            ("ordinary", "ordinary"),
+            ("ignore", "instructions", "ignore", "instructions"),
+            categories,
+        )
+    )
+    assert calls
+    assert len(calls) == len(set(calls))
+    assert ("ignore", "ignore") in calls
 
 
 def test_boundary_batch_dispatch_and_early_returns(

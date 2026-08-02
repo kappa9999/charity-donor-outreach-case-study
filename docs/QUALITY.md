@@ -56,9 +56,9 @@ production runtime dependency.
 
 Evidence recorded on 2026-08-01 against policy version `2026-08-01.9`:
 
-- Windows CPython 3.12: 1,253 tests passed with 97.89% aggregate branch coverage against a 95%
+- Windows CPython 3.12: 1,254 tests passed with 97.88% aggregate branch coverage against a 95%
   required threshold.
-- The built wheel, installed into isolated environments: 1,253 tests passed on Windows Python
+- The built wheel, installed into isolated environments: 1,254 tests passed on Windows Python
   3.11, Windows Python 3.14, and WSL2 Ubuntu Python 3.12.
 - Ruff formatting/lint and strict mypy checks passed for all source and maintenance scripts on
   Windows; strict mypy also passed under WSL2.

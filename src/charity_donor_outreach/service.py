@@ -444,6 +444,7 @@ _BOUNDARY_CONTACT_HINT = re.compile(
     r"website|write\s+to|www)\b|[A-Za-z0-9]\.[A-Za-z0-9]|^\s*\.[A-Za-z0-9])",
     re.IGNORECASE,
 )
+_BOUNDARY_ASCII_DIGIT = re.compile(r"[0-9]")
 _CONTACT_EMAIL_CUE = re.compile(
     r"\b(?:contact|e-mail|email|reach|write\s+to)\b",
     re.IGNORECASE,
@@ -509,7 +510,11 @@ def _pairwise_boundary_views(values: Sequence[str]) -> tuple[str, ...]:
 def _contact_boundary_hint(value: str) -> bool:
     if _BOUNDARY_CONTACT_HINT.search(value) or _BOUNDARY_ENCODING_HINT.search(value):
         return True
-    numeric_positions = [index for index, character in enumerate(value) if character.isnumeric()]
+    numeric_positions = (
+        [match.start() for match in _BOUNDARY_ASCII_DIGIT.finditer(value)]
+        if value.isascii()
+        else [index for index, character in enumerate(value) if character.isnumeric()]
+    )
     required_numeric_count = 3 if "+" in value else 7
     if len(numeric_positions) >= required_numeric_count:
         for start in range(len(numeric_positions) - required_numeric_count + 1):
@@ -554,10 +559,15 @@ def _prepare_boundary_components(
     return tuple(prepared)
 
 
-def _boundary_category_possible(category: str, spaced: str, compact: str) -> bool:
+def _boundary_category_possible(
+    category: str,
+    spaced: str,
+    compact: str,
+    *,
+    encoded: bool,
+) -> bool:
     """Return whether one edge-local join can complete a category signature."""
 
-    encoded = any(_BOUNDARY_ENCODING_HINT.search(value) is not None for value in (spaced, compact))
     if category == "contact":
         return any(_contact_boundary_hint(value) for value in (spaced, compact))
     if category == "money":
@@ -579,20 +589,36 @@ def _ordered_boundary_candidates(
     second: _PreparedBoundaryComponent,
     categories: frozenset[str],
 ) -> Iterator[tuple[str, frozenset[str], str, str]]:
+    views_by_window: dict[int, tuple[str, str, str]] = {}
+    encoded_by_window: dict[int, bool] = {}
     for category in categories:
         window = _BOUNDARY_CATEGORY_WINDOWS[category]
-        first_edge = first.tail[-window:]
-        second_edge = second.head[:window]
-        compact_first = first_edge.rstrip(" \t\r\n.,;:!?")
-        compact_second = second_edge.lstrip(" \t\r\n.,;:!?")
-        spaced = f"{first_edge} {second_edge}"
-        compact = f"{compact_first}{compact_second}"
+        if window not in views_by_window:
+            first_edge = first.tail[-window:]
+            second_edge = second.head[:window]
+            compact_first = first_edge.rstrip(" \t\r\n.,;:!?")
+            compact_second = second_edge.lstrip(" \t\r\n.,;:!?")
+            views_by_window[window] = (
+                f"{first_edge} {second_edge}",
+                f"{compact_first}{compact_second}",
+                first_edge,
+            )
+        spaced, compact, first_edge = views_by_window[window]
         if category == "contact" and all(
             edge.strip().isascii() and edge.strip().isdecimal()
-            for edge in (first_edge, second_edge)
+            for edge in (first_edge, second.head[:window])
         ):
             continue
-        if not _boundary_category_possible(category, spaced, compact):
+        if window not in encoded_by_window:
+            encoded_by_window[window] = any(
+                _BOUNDARY_ENCODING_HINT.search(value) is not None for value in (spaced, compact)
+            )
+        if not _boundary_category_possible(
+            category,
+            spaced,
+            compact,
+            encoded=encoded_by_window[window],
+        ):
             continue
         possible = frozenset({category})
         yield spaced, possible, first.tail, second.head
@@ -607,10 +633,16 @@ def _iter_pairwise_boundary_candidates(
     categories: frozenset[str],
 ) -> Iterator[tuple[str, frozenset[str], str, str]]:
     prepared = _prepare_boundary_components(values)
+    seen_edges: set[tuple[str, str]] = set()
     for left_index, left in enumerate(prepared):
         for right in prepared[left_index + 1 :]:
-            yield from _ordered_boundary_candidates(left, right, categories)
-            yield from _ordered_boundary_candidates(right, left, categories)
+            for first, second in ((left, right), (right, left)):
+                edge_key = (first.tail, second.head)
+                # Boundary behavior depends only on this ordered edge pair.
+                if edge_key in seen_edges:
+                    continue
+                seen_edges.add(edge_key)
+                yield from _ordered_boundary_candidates(first, second, categories)
 
 
 def _iter_cross_boundary_candidates(
@@ -622,14 +654,25 @@ def _iter_cross_boundary_candidates(
 
     base = _prepare_boundary_components(base_values)
     extras = _prepare_boundary_components(extra_values)
+    seen_edges: set[tuple[str, str]] = set()
     for base_value in base:
         for extra_value in extras:
-            yield from _ordered_boundary_candidates(base_value, extra_value, categories)
-            yield from _ordered_boundary_candidates(extra_value, base_value, categories)
+            for first, second in ((base_value, extra_value), (extra_value, base_value)):
+                edge_key = (first.tail, second.head)
+                # Boundary behavior depends only on this ordered edge pair.
+                if edge_key in seen_edges:
+                    continue
+                seen_edges.add(edge_key)
+                yield from _ordered_boundary_candidates(first, second, categories)
     for left_index, left in enumerate(extras):
         for right in extras[left_index + 1 :]:
-            yield from _ordered_boundary_candidates(left, right, categories)
-            yield from _ordered_boundary_candidates(right, left, categories)
+            for first, second in ((left, right), (right, left)):
+                edge_key = (first.tail, second.head)
+                # Boundary behavior depends only on this ordered edge pair.
+                if edge_key in seen_edges:
+                    continue
+                seen_edges.add(edge_key)
+                yield from _ordered_boundary_candidates(first, second, categories)
 
 
 def _boundary_batch_unsafe(category: str, values: Sequence[str]) -> bool:
