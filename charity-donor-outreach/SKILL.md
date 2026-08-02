@@ -47,6 +47,13 @@ Reject undeclared fields and malformed values. Continue with the next record aft
 failure. Enforce the documented byte, depth, node, collection, fact, and diagnostic ceilings
 before nested validation or provider work.
 
+When an uploaded CSV or legacy donor list omits explicit consent, suppression state, selected
+contact path, campaign controls, exact dates required by policy, or approval/provenance for claims,
+do not repair it with guesses. Preserve the supplied source, return a concise readiness report
+listing the missing authoritative fields, and request or join those controls before drafting. A
+demonstration may add synthetic controls only when they are visibly labelled and kept separate
+from source-provided facts.
+
 ### 3. Decide eligibility before drafting
 
 Apply rules in this order:

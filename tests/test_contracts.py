@@ -135,20 +135,11 @@ def test_json_schemas_are_valid_and_accept_committed_examples() -> None:
         assert schema["$schema"] == "https://json-schema.org/draft/2020-12/schema"
         Draft202012Validator.check_schema(schema)
 
-    campaign = json.loads((ROOT / "examples" / "campaign.json").read_text(encoding="utf-8"))
-    donors = [
-        json.loads(line)
-        for line in (ROOT / "examples" / "donors.jsonl").read_text(encoding="utf-8").splitlines()
-    ]
-    results = [
-        json.loads(line)
-        for line in (ROOT / "examples" / "results.jsonl").read_text(encoding="utf-8").splitlines()
-    ]
     checker = FormatChecker()
-    Draft202012Validator(
+    campaign_validator = Draft202012Validator(
         documents["campaign-brief.schema.json"],
         format_checker=checker,
-    ).validate(campaign)
+    )
     donor_validator = Draft202012Validator(
         documents["donor-record.schema.json"],
         format_checker=checker,
@@ -157,10 +148,14 @@ def test_json_schemas_are_valid_and_accept_committed_examples() -> None:
         documents["outreach-result.schema.json"],
         format_checker=checker,
     )
-    for donor in donors:
-        donor_validator.validate(donor)
-    for result in results:
-        result_validator.validate(result)
+    example_directories = [ROOT / "examples", ROOT / "examples" / "jll-supplied"]
+    for example_directory in example_directories:
+        campaign = json.loads((example_directory / "campaign.json").read_text(encoding="utf-8"))
+        campaign_validator.validate(campaign)
+        for line in (example_directory / "donors.jsonl").read_text(encoding="utf-8").splitlines():
+            donor_validator.validate(json.loads(line))
+        for line in (example_directory / "results.jsonl").read_text(encoding="utf-8").splitlines():
+            result_validator.validate(json.loads(line))
 
 
 def test_json_schema_rejects_runtime_contract_bypasses() -> None:
@@ -850,7 +845,17 @@ def test_local_markdown_links_resolve() -> None:
 
 
 def test_public_surface_contains_source_artifacts_only() -> None:
-    excluded_roots = {".venv", ".git", ".pytest_cache", ".mypy_cache", ".ruff_cache"}
+    excluded_roots = {
+        ".git",
+        ".mypy_cache",
+        ".pytest_cache",
+        ".ruff_cache",
+        ".venv",
+        ".venv-reviewer",
+        "build",
+        "dist",
+        "out",
+    }
     visible_files = [
         path
         for path in ROOT.rglob("*")
@@ -861,7 +866,11 @@ def test_public_surface_contains_source_artifacts_only() -> None:
 
 
 def test_examples_use_reserved_email_domains_only() -> None:
-    donors_text = (ROOT / "examples" / "donors.jsonl").read_text(encoding="utf-8")
+    donor_files = [
+        ROOT / "examples" / "donors.jsonl",
+        ROOT / "examples" / "jll-supplied" / "donors.jsonl",
+    ]
+    donors_text = "\n".join(path.read_text(encoding="utf-8") for path in donor_files)
     addresses = re.findall(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+", donors_text)
     assert addresses
     assert all(address.endswith("@example.org") for address in addresses)

@@ -44,6 +44,24 @@ Require one object per donor:
 
 Reject unknown fields. Do not ingest free-form CRM notes into drafting context.
 
+## Incomplete lists and onboarding
+
+An uploaded CSV or legacy list is not generation-ready merely because it contains names and gift
+history. Before normalization, inventory which fields are source-provided, derived, absent, or
+supplied as explicit test controls. If channel consent, do-not-contact state, selected-channel
+contact data, exact policy dates, campaign configuration, or claim approval/provenance is absent:
+
+1. preserve the source rows without rewriting their meaning;
+2. return a readiness report with record count and missing authoritative fields;
+3. do not call a drafting provider or create donor-facing copy;
+4. request or join the missing values from the system that owns them; and
+5. record any test-only augmentation separately from source field lineage.
+
+Never map a missing consent value to granted, a missing suppression flag to false, or an imprecise
+year to an exact production date. Synthetic controls and placeholder dates may be used only in a
+clearly labelled, non-production demonstration where they cannot be confused with received data.
+The executable reference consumes normalized JSON/JSONL after this onboarding boundary.
+
 Parse UTF-8 JSON with duplicate-member rejection at every nesting level. Reject NaN, infinity,
 oversized/excessive-exponent numbers, invalid Unicode scalar values, unsafe controls, and excessive
 nesting rather than relying on parser-specific behavior. Text uses a pinned Unicode 14 baseline:

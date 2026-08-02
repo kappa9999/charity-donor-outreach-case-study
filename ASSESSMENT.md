@@ -19,6 +19,12 @@ The rewrite turns the artifact into a narrow workflow contract:
 The requested outcomes—consistent, reliable, scalable drafts—come from explicit contracts,
 deterministic decisions, failure isolation, and human review rather than additional prompt detail.
 
+The received skill also embeds 50 mocked donor rows but omits consent, suppression, contact-path,
+exact-date, campaign-control, and claim-approval fields. The implementation therefore preserves
+the supplied table as a provenance-locked source fixture and demonstrates all 50 rows only after
+adding separately documented synthetic test controls. This makes the sample executable without
+misrepresenting inferred operational authority as received data.
+
 ## Improvements and impact
 
 | Problem in the supplied artifact | Refinement | Operational impact |

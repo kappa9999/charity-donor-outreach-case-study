@@ -1,0 +1,38 @@
+{
+  "campaign_id": "JLL-SUPPLIED-TABLE-2026",
+  "organization_name": "Example Animal Welfare Charity",
+  "campaign_name": "Controlled Outreach Demonstration",
+  "purpose": "This demonstration describes a hypothetical campaign to improve temporary care capacity for animals.",
+  "tone": "warm-professional",
+  "sender": {
+    "name": "Jordan Lee",
+    "role": "Director of Development"
+  },
+  "call_to_action": {
+    "label": "Review the sample campaign",
+    "url": "https://donate.example.org/jll-case-study"
+  },
+  "as_of_date": "2026-08-01",
+  "minimum_days_between_contacts": 30,
+  "ask_policy": {
+    "strategy": "last_gift_multiplier",
+    "currency": "USD",
+    "multiplier": "0.25",
+    "rounding_increment": "50.00",
+    "minimum": "50.00",
+    "maximum": "25000.00"
+  },
+  "review_policy": {
+    "segments": [
+      "major",
+      "principal"
+    ],
+    "ask_amount_at_or_above": "5000.00"
+  },
+  "facts": [],
+  "prohibited_phrases": [
+    "every hour counts",
+    "guaranteed match",
+    "naming opportunity"
+  ]
+}

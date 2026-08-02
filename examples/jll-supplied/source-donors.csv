@@ -1,0 +1,51 @@
+donor_id,donor_name,first_name,last_name,tier,region,gifts,largest_gift,lifetime_total,last_gift_year,volunteer
+ORIG-001,Robert Svensson,Robert,Svensson,Platinum,Northeast,"2010: $25,000, 2013: $30,000, 2016: $40,000, 2020: $50,000",50000,145000,2020,False
+ORIG-002,Earl Fontaine,Earl,Fontaine,Platinum,Southeast,"2012: $50,000, 2015: $60,000, 2018: $75,000, 2022: $90,000",90000,275000,2022,True
+ORIG-003,Walter Adeyemi,Walter,Adeyemi,Platinum,Midwest,"2014: $20,000, 2017: $25,000, 2020: $30,000",30000,75000,2020,False
+ORIG-004,Ralph Osei-Bonsu,Ralph,Osei-Bonsu,Platinum,West,"2013: $40,000, 2016: $50,000, 2019: $65,000, 2023: $80,000",80000,235000,2023,True
+ORIG-005,Victor Ambrosius,Victor,Ambrosius,Platinum,International,"2011: $30,000, 2014: $35,000, 2017: $45,000, 2021: $55,000",55000,165000,2021,False
+ORIG-006,James Whitfield,James,Whitfield,Gold,Northeast,"2015: $5,000, 2017: $8,000, 2019: $10,000, 2022: $12,000",12000,35000,2022,True
+ORIG-007,Dorothy Callahan,Dorothy,Callahan,Gold,Southeast,"2020: $2,000, 2021: $2,500, 2022: $3,000, 2023: $3,500",3500,11000,2023,False
+ORIG-008,Deborah Sorenson,Deborah,Sorenson,Gold,Midwest,"2016: $4,000, 2018: $5,000, 2020: $6,000, 2022: $7,000",7000,22000,2022,False
+ORIG-009,Angela Petersen,Angela,Petersen,Gold,West,"2017: $3,500, 2019: $4,500, 2021: $5,500",5500,13500,2021,False
+ORIG-010,Grace Thornton,Grace,Thornton,Gold,International,"2020: $2,500, 2021: $3,000, 2022: $3,500, 2023: $4,000",4000,13000,2023,False
+ORIG-011,Linda Petrov,Linda,Petrov,Gold,Northeast,"2019: $10,000, 2021: $12,500, 2023: $15,000",15000,37500,2023,False
+ORIG-012,Helen Magnusson,Helen,Magnusson,Gold,Southeast,"2018: $8,000, 2020: $10,000, 2022: $12,000",12000,30000,2022,False
+ORIG-013,Maria Yamamoto,Maria,Yamamoto,Gold,Midwest,"2018: $6,000, 2020: $7,500, 2022: $9,000",9000,22500,2022,False
+ORIG-014,Emma Bergstrom,Emma,Bergstrom,Gold,West,"2019: $5,000, 2021: $6,500, 2023: $8,000",8000,19500,2023,False
+ORIG-015,Nora Bergqvist,Nora,Bergqvist,Gold,International,"2018: $9,000, 2020: $11,000, 2022: $13,000",13000,33000,2022,False
+ORIG-016,Nancy Okafor,Nancy,Okafor,Gold,Southeast,"2017: $5,000, 2019: $6,000, 2021: $7,500",7500,18500,2021,False
+ORIG-017,Vera Johansson,Vera,Johansson,Gold,International,"2017: $7,000, 2019: $8,000, 2021: $9,000",9000,24000,2021,False
+ORIG-018,Margaret Alcott,Margaret,Alcott,Silver,Northeast,"2019: $500, 2020: $750, 2021: $1,000, 2022: $1,200, 2023: $1,500",1500,4950,2023,False
+ORIG-019,Harold Mensah,Harold,Mensah,Silver,Southeast,"2021: $1,000, 2022: $1,200, 2023: $1,400",1400,3600,2023,True
+ORIG-020,Barbara Jensen,Barbara,Jensen,Silver,Midwest,"2021: $1,000, 2022: $1,500, 2023: $2,000",2000,4500,2023,False
+ORIG-021,Betty Nakagawa,Betty,Nakagawa,Silver,West,"2021: $1,500, 2022: $2,000, 2023: $2,500",2500,6000,2023,False
+ORIG-022,Ada Yamamoto-Pierce,Ada,Yamamoto-Pierce,Silver,International,"2020: $3,500, 2021: $4,000, 2022: $4,500, 2023: $5,000",5000,17000,2023,True
+ORIG-023,Claire Oduya,Claire,Oduya,Silver,Northeast,"2018: $1,500, 2019: $2,000, 2023: $3,000",3000,6500,2023,True
+ORIG-024,Ruth Andersen,Ruth,Andersen,Silver,Southeast,"2019: $3,000, 2020: $4,000, 2021: $5,000, 2022: $6,000, 2023: $7,000",7000,25000,2023,True
+ORIG-025,Janet Okonkwo,Janet,Okonkwo,Silver,Midwest,"2019: $2,000, 2021: $2,500, 2023: $3,000",3000,7500,2023,True
+ORIG-026,Shirley Magnusdottir,Shirley,Magnusdottir,Silver,West,"2020: $4,000, 2021: $5,000, 2022: $6,000, 2023: $7,000",7000,22000,2023,True
+ORIG-027,Owen Oduya,Owen,Oduya,Silver,International,"2021: $800, 2022: $1,000, 2023: $1,200",1200,3000,2023,True
+ORIG-028,Susan Nakamura,Susan,Nakamura,Silver,Northeast,"2020: $500, 2021: $750, 2022: $1,000, 2023: $1,250, 2024: $1,500",1500,5000,2024,True
+ORIG-029,Joe Iwamoto,Joe,Iwamoto,Silver,West,"2020: $750, 2021: $900, 2022: $1,100, 2023: $1,300",1300,4050,2023,True
+ORIG-030,Michael Torres,Michael,Torres,Lapsed,Northeast,"2017: $500, 2018: $600, 2019: $700",700,1800,2019,False
+ORIG-031,Charles Kimura,Charles,Kimura,Lapsed,Southeast,"2015: $400, 2016: $400, 2017: $400",400,1200,2017,False
+ORIG-032,Paul Achebe,Paul,Achebe,Lapsed,Midwest,"2017: $300, 2018: $300, 2019: $300",300,900,2019,False
+ORIG-033,Frank Watanabe,Frank,Watanabe,Lapsed,West,"2016: $350, 2017: $350, 2018: $350",350,1050,2018,False
+ORIG-034,Lars Achebe-Nielsen,Lars,Achebe-Nielsen,Lapsed,International,"2015: $400, 2016: $400, 2017: $400",400,1200,2017,False
+ORIG-035,Thomas Bergmann,Thomas,Bergmann,Lapsed,Northeast,"2014: $300, 2015: $300",300,600,2015,False
+ORIG-036,Frank Dimitriou,Frank,Dimitriou,Lapsed,Southeast,"2016: $200, 2017: $200, 2018: $200",200,600,2018,False
+ORIG-037,Raymond Volkov,Raymond,Volkov,Lapsed,Midwest,"2019: $250, 2020: $250",250,500,2020,False
+ORIG-038,Henry Obi,Henry,Obi,Lapsed,West,"2018: $150, 2019: $200",200,350,2019,False
+ORIG-039,Felix Mensah-Bonsu,Felix,Mensah-Bonsu,Lapsed,International,"2019: $300, 2020: $300",300,600,2020,False
+ORIG-040,Patricia Huang,Patricia,Huang,Bronze,Northeast,"2021: $200, 2022: $250",250,450,2022,False
+ORIG-041,Brenda Kowalski,Brenda,Kowalski,Bronze,Southeast,2023: $150,150,150,2023,False
+ORIG-042,Carol Eriksson,Carol,Eriksson,Bronze,Midwest,2023: $100,100,100,2023,False
+ORIG-043,Kathy Lindberg,Kathy,Lindberg,Bronze,West,2022: $125,125,125,2022,False
+ORIG-044,Iris Kowalczyk,Iris,Kowalczyk,Bronze,International,2023: $200,200,200,2023,False
+ORIG-045,David Osei,David,Osei,Bronze,Northeast,"2022: $75, 2023: $100",100,175,2023,False
+ORIG-046,George Nwosu,George,Nwosu,Bronze,Southeast,"2022: $50, 2023: $75",75,125,2023,False
+ORIG-047,Samuel Lindqvist,Samuel,Lindqvist,Bronze,Midwest,2022: $50,50,50,2022,False
+ORIG-048,Jack Nkemdirim,Jack,Nkemdirim,Bronze,West,2023: $50,50,50,2023,False
+ORIG-049,Igor Volkov,Igor,Volkov,Bronze,International,2022: $75,75,75,2022,False
+ORIG-050,Arthur Mwangi,Arthur,Mwangi,Bronze,Midwest,"2020: $500, 2021: $600, 2022: $700, 2023: $800",800,2600,2023,True

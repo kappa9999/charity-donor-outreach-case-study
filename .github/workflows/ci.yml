@@ -51,6 +51,9 @@ jobs:
       - name: Type check
         run: python -m mypy src scripts
 
+      - name: Run reviewer examples
+        run: python scripts/run_examples.py --output-dir out/ci-reviewer-demo
+
       - name: Test behavioral contracts
         run: python -m pytest
 

@@ -1,0 +1,67 @@
+{
+  "attachment": {
+    "filename": "charity-donor-outreach.zip",
+    "bytes": 5495,
+    "sha256": "08833833da105c65242643ed07049c7debd931f9bbfd348690831c49f8d64f5b",
+    "embedded_table_rows": 50
+  },
+  "source_fixture": {
+    "path": "examples/jll-supplied/source-donors.csv",
+    "sha256": "40ccc01cb64abd457ce268f63c20306b452173f27f3864661871c09d2ed28cff",
+    "rows": 50,
+    "columns": [
+      "donor_id",
+      "donor_name",
+      "first_name",
+      "last_name",
+      "tier",
+      "region",
+      "gifts",
+      "largest_gift",
+      "lifetime_total",
+      "last_gift_year",
+      "volunteer"
+    ],
+    "normalization_columns_not_present_in_attachment": [
+      "donor_id",
+      "first_name",
+      "last_name"
+    ]
+  },
+  "operational_fixture": {
+    "path": "examples/jll-supplied/donors.jsonl",
+    "sha256": "4167f59b4d11997ac504443d2f237892c288df85e8f847ead40bf5e780ba8524",
+    "records": 50
+  },
+  "field_lineage": {
+    "preserved_from_attachment": [
+      "donor_name represented as first_name plus last_name",
+      "tier represented as segment through the documented mapping",
+      "gift history represented through validated giving aggregates",
+      "largest_gift_amount",
+      "lifetime_value"
+    ],
+    "derived_fields": [
+      "stable ORIG row identifier",
+      "first_name and last_name split from donor_name",
+      "last_gift_amount from the final supplied gift entry",
+      "segment from the supplied tier",
+      "December 31 placeholder date from the supplied last-gift year"
+    ],
+    "synthetic_test_controls": [
+      "preferred_channel=email",
+      "channel_consent=granted",
+      "do_not_contact=false",
+      "reserved example.org email",
+      "title=null",
+      "last_contact_date=null",
+      "facts=[]"
+    ],
+    "source_only_fields": [
+      "region",
+      "volunteer",
+      "gift years"
+    ]
+  },
+  "safety_note": "The source CSV is a lossless normalized transcription: donor_id and split-name columns are bookkeeping fields not present in the attachment. The supplied table does not contain channel consent, suppression, contact-path, campaign-control, or approved-claim fields. The operational fixture adds visibly labelled test controls only; production onboarding must obtain those values from authoritative systems and must never infer them."
+}
